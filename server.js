@@ -6,7 +6,7 @@ http.createServer(function(req,res){
   switch(host){
     case '69.85.84.73'  :  require('./test/app.js')(req,res);
 	break;
-
+    case 'yitiaobiji.com' : require('./blog/app.js')(req,res);break;
     case localhost  :  require('./blog/app.js')(req,res);
     	break;
 	
