@@ -23,9 +23,14 @@
 
   <div class="container-fluid">
     <div class="row-fuild">
-    <div class="span8 well" id="blog_div" style="height:1000px">    
-    <h1>hello world</h1>
-
+    <div class="span8 well" id="blog_div" style="height:1000px">        
+    
+    <h1 class="well">Welcome to <a href="http://weibo.com/ft15222919293">Tong Feng</a> Page
+    
+    <a href="./newblog" class="btn pull-right btn-primary">New Blog</a>
+    </h1>
+    <hr>
+ <!--
     <div class="row-fluid">
     <div class="span3">
     <img style="margin-left:80px;" src="https://secure.gravatar.com/avatar/04dee8307eeb737dd49ea4446f32793e"</img>
@@ -36,6 +41,7 @@
     <p class="lead">Here is content</p>
     </div>
     </div>
+-->
   </div>  
    
 
@@ -58,14 +64,17 @@
 
    <script>
    ajax.get('all-blog.get',function(data){
+     console.log(data);
      var all_blog = JSON.parse(data);
-     for(var key in all_blog){
-       var a = all_blog[key];
+     console.log(all_blog.length);
+     for(var i = 0; i < all_blog.length; i++){
+       var a = all_blog[all_blog.length - i - 1];
        genHTML(a);
      }
    });
 
    function genHTML(a){
+     console.log(a);
      var title = a.title;
      var content = a.content;
      var html = "";

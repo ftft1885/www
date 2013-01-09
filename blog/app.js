@@ -6,7 +6,7 @@ module.exports = function(req,res){
 //  db.run("insert into test values('test',"+(new Date()).getTime()+")");
   var pathname = require('url').parse(req.url).pathname;
   if(pathname == '/'){pathname += 'index.html';}
-  var filepath = '.' + pathname.split('.')[0];
+  var filepath = __dirname + pathname.split('.')[0];
 
   var filekind = pathname.split('.')[1];
   if(!filekind)  filekind = 'html';//maybe jade,ets,other day
@@ -20,7 +20,7 @@ module.exports = function(req,res){
     case 'css'   :  contentType = 'text/css';break;
     case 'js'    :  contentType = 'text/javascript';break;
     case 'get'   :  rest.get(req,res);return;break;
-    case 'post'  :  rest.post(req,res);break;
+    case 'post'  :  rest.post(req,res);return;break;
   }
   filepath += '.' + filekind;
 
