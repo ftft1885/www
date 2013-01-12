@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TT_Blog</title>
+    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet"></link>
+    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet"></link>
+  <script src="js/tong.js"></script>
+  </head>
+  <body>
+  <div class="navbar navbar-inverse">
+  <div class="navbar-inner">
+    <a class="brand" href='#'>TT_Blog</a>
+    <ul class="nav">
+    <li><a href='#'>new blog</a>
+    <li><a href='#'>say say</a>
+    <li><a href='#'>About Me</a>
+    </ul>
+    <span class="pull-right"><a class="brand" href="#">to-do</a></span>
+  </div>    
+  </div>
+
+  <div class="container-fluid">
+    <div class="row-fuild">
+    <div class="span8 well" id="blog_div" style="height:1000px">        
+    
+    <h1 class="well">Welcome to <a href="http://weibo.com/ft15222919293">Tong Feng</a> Page
+    
+    <a href="./newblog" class="btn pull-right btn-primary">New Blog</a>
+    </h1>
+    <hr>
+ 
+    <div class="row-fluid">
+    <button class="pull-right" data-rowid=2 onclick="console.log(this.dataset.rowid);">x</button>
+    <div class="span3">
+    <img style="margin-left:80px;" src="https://secure.gravatar.com/avatar/04dee8307eeb737dd49ea4446f32793e"</img>
+    </div>
+    <div class="well span8">
+    <h4 class="pull-right">this is time</h4>
+    <h4>title</h4>
+    <p class="lead">Here is content</p>
+    </div>
+    </div>
+
+  </div>  
+   
+
+    <div class="span3 well">
+    <h2>sidebar</h2>
+    <h4>something</h4>
+    <h4>something</h4>
+    <h4>something</h4>
+    </div>
+    
+    <div class="span3 well">
+    <h2>sidebar two</h2>
+    <h4>something..</h4>
+    <h4>something..</h4>
+    <h4>something..</h4>
+    </div>
+    </div>  
+  </div>
+
+
+  <script>
+  ajax.get('all-blog.get',function(data){
+    console.log(data);
+    window.all_blog = JSON.parse(data);
+    console.log(all_blog.length);
+    for(var i = 0; i < all_blog.length; i++){
+      var a = all_blog[all_blog.length - i - 1];
+      genHTML(a);
+    }
+  });
+
+  function genHTML(a){
+    console.log(a);
+    var title = a.title;
+    var content = a.content;
+    var rowid = a.rowid;
+    var html = "";
+    html += '<div class="row-fluid" id="blog'+rowid+'">'
+    +'<button class="btn pull-right" data-rowid="'+rowid+'" onclick="editBlog(this.dataset.rowid);">edit</button>'
+    +'<div class="span3">'
+    +'<img style="margin-left:80px;" src="https://secure.gravatar.com/avatar/04dee8307eeb737dd49ea4446f32793e"</img>'
+    +'</div>'
+    +'<div class="well span8">'
+    +'<h4 class="pull-right">this is time</h4>'
+    +'<h4>'+title+'</h4>'
+    +'<p class="lead">'+content+'</p>'
+    +'</div>'
+    +'</div>';
+    var blog_div = document.getElementById('blog_div');
+    blog_div.innerHTML+=html;
+  }
+  function editBlog(rowid){
+    var a = all_blog[rowid-1];//rowid from 1
+    console.log(a);
+    var div = document.getElementById('blog'+rowid);
+    all_blog[rowid-1].lasthtml = div.innerHTML;
+    var html = "";
+    html += '<button class="pull-right btn" onclick="cancelBlog('+rowid+');">cancel</button>'
+    + '<button class="pull-right btn" onclick="submitBlog('+rowid+')">submit</button>'
+    + '<div class="span3">'
+    + '<img style="margin-left:80px;" src="https://secure.gravatar.com/avatar/04dee8307eeb737dd49ea4446f32793e"</img>'
+    + '</div>'
+    + '<div class="well span8">'
+    + '<input id="title'+rowid+'" value="'+a.title+'"></input><br>'
+    + '<textarea id="content'+rowid+'" style="resize:none">'+a.content+'</textarea>'
+    + '</div>';
+    div.innerHTML = html;
+  }
+  function submitBlog(rowid){
+    var title = document.getElementById('title'+rowid).value;
+    var content = document.getElementById('content'+rowid).value;
+    var postjson = {
+      title : title,
+      content : content,
+      rowid : rowid,
+    };
+    var url = "blog-update.post";
+    ajax.post(url,JSON.stringify(postjson),function(data){
+    console.log(data);
+      if(data == 'ok'){
+        var div = document.getElementById('blog'+rowid);
+        div.innerHTML = all_blog[rowid-1].lasthtml;
+      }
+    });
+  }
+  function cancelBlog(rowid){
+    var div = document.getElementById('blog'+rowid);
+    div.innerHTML = all_blog[rowid-1].lasthtml;   
+  }
+   </script>
+  </body>
+</html>

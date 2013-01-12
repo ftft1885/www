@@ -15,8 +15,23 @@ rest.post = function(req,res){
   var pathname = require('url').parse(req.url).pathname.split('.')[0];
   switch(pathname){
     case '/addnewblog' : add_new_blog(req,res);break;
+    case '/blog-update': update_blog(req,res);break;
   }
 };
+
+function update_blog(req,res){
+  req.on('data',function(data){
+    var json = JSON.parse(data+"");
+    var stmt = "update blog set title='"+json.title+"'"
+    + ",content='"+json.content+"'"
+    + "where rowid="+json.rowid+";";
+    console.log(stmt);
+    db.run(stmt,function(){
+      console.log('success');
+    });
+    res.end('ok');
+  });
+}
 
 function add_new_blog(req,res){
   req.on('data',function(data){
@@ -45,7 +60,8 @@ function add_new_blog(req,res){
 }
 
 function send_all_blog(res){   
-  db.all('select * from blog',function(err,rows){
+  db.all('select rowid,* from blog',function(err,rows){
+    console.log(rows);
     res.end(JSON.stringify(rows));
   })
 };
