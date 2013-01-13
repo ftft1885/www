@@ -1,6 +1,15 @@
 var sqlite3 = require('sqlite3').verbose();
+var oss = require('./backup.js');
 var db = new sqlite3.Database(__dirname+'/blog.db');
 var rest = {};
+
+var i = 1;//backup num
+
+function backup(num){
+  oss.put(__dirname+'/blog.db','blog'+num+'.db');
+  console.log("backup"+num);
+  if(num == 10) i = 1;
+}
 
 rest.get = function(req,res){
   var pathname = require('url').parse(req.url).pathname.split('.')[0];
@@ -28,6 +37,7 @@ function update_blog(req,res){
     console.log(stmt);
     db.run(stmt,function(){
       console.log('success');
+      backup(i++);
     });
     res.end('ok');
   });
@@ -51,6 +61,7 @@ function add_new_blog(req,res){
       +'values('+value+');';
       console.log(stmt);
       db.run(stmt);
+      backup(i++);
     }
   });
   req.on('end',function(){
