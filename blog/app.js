@@ -1,5 +1,5 @@
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('blogdb');
+var db = new sqlite3.Database('blog.db');
 var rest = require('./rest.js');
 
 module.exports = function(req,res){
