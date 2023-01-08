@@ -29,8 +29,8 @@ oss.put = function(file,myname){
 
 function getSid(){
   var access  = {
-    id : 'ddPofY9mfxnGNEsb',
-    key : 'ZT5olgXJ93JCp6kYAP1jAH64FAX4JO'
+    id : '****',
+    key : '*****'
   }
   
   var params = [
